@@ -20,3 +20,4 @@ pub fn unsubscribe(product_type: &str) -> Result<Json<SubscriberRequest>> {
         Err(e) => Err(e)
     }
 }
+
