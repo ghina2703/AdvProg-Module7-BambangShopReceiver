@@ -13,8 +13,8 @@ pub struct NotificationService;
 impl NotificationService{
     pub fn subscribe(product_type: &str) -> Result<SubscriberRequest> {
         let product_type_clone = String::from(product_type);
-        return thread::spawn(move || Self::subscribe_request(product_type_clone))
-            .join().unwrap();
+        thread::spawn(move || Self::subscribe_request(product_type_clone))
+            .join().unwrap()
     }
 
     #[tokio::main]
@@ -38,7 +38,7 @@ impl NotificationService{
             .send().await;
         log::warn_!("Sent subscribe request to: {}", request_url);
 
-        return match request {
+        match request {
             Ok(f) => match f.json::<SubscriberRequest>().await {
                 Ok(x) => Ok(x),
                 Err(y) => Err(compose_error_response(
