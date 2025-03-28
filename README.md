@@ -1,5 +1,11 @@
 # BambangShop Receiver App
-Tutorial and Example for Advanced Programming 2024 - Faculty of Computer Science, Universitas Indonesia
+Tutorial and Example for Advanced Programming 2025 - Faculty of Computer Science, Universitas Indonesia
+
+**Nama    : Ghina Nabila Gunawan**
+
+**NPM     : 2206825914**
+
+**Kelas   : AdvProg - A**
 
 ---
 
@@ -42,14 +48,17 @@ You can install Postman via this website: https://www.postman.com/downloads/
     APP_INSTANCE_NAME=Safira Sudrajat
     ```
     Here are the details of each environment variable:
+
     | variable                | type   | description                                                     |
     |-------------------------|--------|-----------------------------------------------------------------|
     | ROCKET_PORT             | string | Port number that will be listened by this receiver instance.    |
     | APP_INSTANCE_ROOT_URL   | string | URL address where this receiver instance can be accessed.       |
     | APP_PUUBLISHER_ROOT_URL | string | URL address where the publisher instance can be accessed.       |
     | APP_INSTANCE_NAME       | string | Name of this receiver instance, will be shown on notifications. |
+
 2.  Use `cargo run` to run this app.
     (You might want to use `cargo check` if you only need to verify your work without running the app.)
+
 3.  To simulate multiple instances of BambangShop Receiver (as the tutorial mandates you to do so),
     you can open new terminal, then edit `ROCKET_PORT` in `.env` file, then execute another `cargo run`.
 
@@ -59,14 +68,14 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   Open another new terminal, edit `ROCKET_PORT` in `.env` to `8003`, then execute `cargo run`.
 
 ## Mandatory Checklists (Subscriber)
--   [ ] Clone https://gitlab.com/ichlaffterlalu/bambangshop-receiver to a new repository.
+-   [x] Clone https://gitlab.com/ichlaffterlalu/bambangshop-receiver to a new repository.
 -   **STAGE 1: Implement models and repositories**
-    -   [ ] Commit: `Create Notification model struct.`
-    -   [ ] Commit: `Create SubscriberRequest model struct.`
-    -   [ ] Commit: `Create Notification database and Notification repository struct skeleton.`
-    -   [ ] Commit: `Implement add function in Notification repository.`
-    -   [ ] Commit: `Implement list_all_as_string function in Notification repository.`
-    -   [ ] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
+    -   [x] Commit: `Create Notification model struct.`
+    -   [x] Commit: `Create SubscriberRequest model struct.`
+    -   [x] Commit: `Create Notification database and Notification repository struct skeleton.`
+    -   [x] Commit: `Implement add function in Notification repository.`
+    -   [x] Commit: `Implement list_all_as_string function in Notification repository.`
+    -   [x] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
 -   **STAGE 3: Implement services and controllers**
     -   [ ] Commit: `Create Notification service struct skeleton.`
     -   [ ] Commit: `Implement subscribe function in Notification service.`
@@ -84,6 +93,17 @@ This is the place for you to write reflections:
 
 ### Mandatory (Subscriber) Reflections
 
-#### Reflection Subscriber-1
+### Reflection Subscriber-1
+**1. In this tutorial, we used RwLock<> to synchronise the use of Vec of Notifications. Explain why it is necessary for this case, and explain why we do not use Mutex<> instead?**
+> Dalam implementasi ini, kita menggunakan `RwLock<>` untuk **menghindari bottleneck** dalam **data access**. `RwLock<>` memungkinkan **banyak thread** untuk `read()` secara bersamaan, tapi hanya satu thread yang bisa `write()`.
+Jika kita menggunakan `Mutex<>`, hanya **satu thread** yang bisa mengakses data dalam satu waktu, baik untuk membaca maupun menulis. Hal ini akan memperlambat program jika ada banyak pembacaan data karena semua thread harus menunggu giliran untuk mendapatkan akses, meskipun hanya untuk membaca. 
+Pada case ini, kita lebih sering membaca daftar notifikasi daripada menulisnya. Dengan `RwLock<>`, banyak thread bisa membaca data **secara paralel**, dan hanya akan di-lock saat ada **proses `write()`**.
 
-#### Reflection Subscriber-2
+**2.  In this tutorial, we used lazy_static external library to define Vec and DashMap as a “static” variable. Compared to Java where we can mutate the content of a static variable via a static function, why did not Rust allow us to do so?**
+> Di Rust, **variabel static bersifat immutable (tidak bisa diubah)** secara langsung karena Rust menerapkan konsep **memory safety** tanpa **garbage collector**. Kalau Rust mengizinkan direct modification terhadap variabel `static`, maka akan muncul **race condition**, di mana beberapa thread bisa mengakses dan mengubah data yang sama secara bersamaan tanpa kontrol yang jelas.
+Sebagai solusi, kita menggunakan **`lazy_static!`** untuk membuat variabel `static` yang bisa berubah, tetapi tetap dengan kontrol akses menggunakan `RwLock<>` atau `Mutex<>`. Ini memastikan kalau semua mutasi tetap aman dan terkontrol.
+Sedangkan di Java, kita bisa mengubah variabel `static` melalui method `static` karena Java menggunakan **garbage collector** yang bisa menangani **data race** dan **memory leaks** secara otomatis. Tapi Rust memberikan kita full control terhadap memory, jadi lebih ketat dalam menangani data modification secara paralel untuk mencegah bug yang sulit dideteksi.
+
+---
+
+### Reflection Subscriber-2
