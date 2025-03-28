@@ -132,7 +132,6 @@ Jadi saya tidak terlalu mengeksplorasi `src/lib.rs` atau bagian lain yang tidak 
 
 > Untuk memastikan **API terdokumentasi** dengan baik, saya mengimpor **Postman Collection JSON** yang disediakan pada link di atas. Setelah itu, saya melakukan beberapa penyesuaian dan pengisian template yang sudah ada:
 > 
-> - Saya menambahkan environment variables seperti `{{receiver_url}}` dan `{{publisher_url}}` untuk membuat request lebih fleksibel. 
-> - Misalnya, kalau ada perubahan port dari **8001** ke **8002**, saya hanya perlu mengubah satu variabel tanpa perlu mengedit setiap request secara manual.
+> - Saya menambahkan environment variables seperti `{{receiver_url}}` dan `{{publisher_url}}` untuk membuat request lebih fleksibel. Misalnya, kalau ada perubahan port dari **8001** ke **8002**, saya hanya perlu mengubah satu variabel tanpa perlu mengedit setiap request secara manual.
 
 ---

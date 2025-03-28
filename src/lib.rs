@@ -26,7 +26,7 @@ pub struct AppConfig {
 
 impl Default for AppConfig {
     fn default() -> AppConfig {
-        return AppConfig {
+        AppConfig {
             instance_root_url: String::from("http://localhost:8001"),
             publisher_root_url: String::from("http://localhost:8000"),
             instance_name: String::from("BambangShop Receiver")
@@ -37,9 +37,9 @@ impl Default for AppConfig {
 impl AppConfig {
     pub fn generate() -> AppConfig {
         dotenv().ok();
-        return Figment::from(Serialized::defaults(AppConfig::default()))
+        Figment::from(Serialized::defaults(AppConfig::default()))
             .merge(Env::prefixed("APP_").global())
-            .extract().unwrap();
+            .extract().unwrap()
     }
 }
 
@@ -55,10 +55,10 @@ pub struct ErrorResponse {
 }
 
 pub fn compose_error_response(status_code: Status, message: String) -> Custom<Json<ErrorResponse>> {
-    return Custom(status_code, Json::from(
+    Custom(status_code, Json::from(
         ErrorResponse {
             status_code: status_code,
             message: message,
         }
-    ));
+    ))
 }
